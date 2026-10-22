@@ -1,0 +1,2 @@
+PORT=5000
+DATABASE_URL=postgresql://neondb_owner:npg_u2Nk0HQBrRbZ@ep-lingering-rice-b515def2-pooler.c-7.us-east-2.aws.neon.tech/master_db?sslmode=require&channel_binding=require
