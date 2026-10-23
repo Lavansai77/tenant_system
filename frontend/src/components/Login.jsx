@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 export default function Login({ onLoginSuccess }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({ org_id: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -15,15 +14,12 @@ export default function Login({ onLoginSuccess }) {
       const res = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Login failed.');
-      }
+      if (!res.ok) throw new Error(data.error || 'Login failed.');
 
-      // Ensure full user payload (including org_id) is passed upwards
       onLoginSuccess(data.user);
     } catch (err) {
       setError(err.message);
@@ -36,21 +32,33 @@ export default function Login({ onLoginSuccess }) {
     <div className="max-w-md mx-auto my-16 bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
       <div className="text-center mb-6">
         <span className="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-          Organization Portal
+          Tenant Database Login
         </span>
-        <h2 className="text-2xl font-extrabold text-slate-900 mt-2">Log In to WorkSpace OS</h2>
-        <p className="text-xs text-slate-500 mt-1">Access your isolated tenant dashboard and workspace spaces.</p>
+        <h2 className="text-2xl font-extrabold text-slate-900 mt-2">Log In to Your Workspace</h2>
+        <p className="text-xs text-slate-500 mt-1">Enter your organization ID, email, and password.</p>
       </div>
 
       {error && <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded-lg text-xs mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Company Email</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">Organization ID</label>
+          <input 
+            type="text" 
+            value={formData.org_id} 
+            onChange={(e) => setFormData({ ...formData, org_id: e.target.value })} 
+            required 
+            placeholder="e.g. acme" 
+            className="w-full border border-slate-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">Admin Email</label>
           <input 
             type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
+            value={formData.email} 
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
             required 
             placeholder="admin@company.com" 
             className="w-full border border-slate-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
@@ -61,8 +69,8 @@ export default function Login({ onLoginSuccess }) {
           <label className="block text-xs font-semibold text-slate-700 mb-1">Password</label>
           <input 
             type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
+            value={formData.password} 
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
             required 
             placeholder="••••••••" 
             className="w-full border border-slate-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" 
@@ -74,7 +82,7 @@ export default function Login({ onLoginSuccess }) {
           disabled={loading}
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow transition duration-200 text-sm disabled:opacity-50"
         >
-          {loading ? 'Authenticating...' : 'Log In'}
+          {loading ? 'Authenticating...' : 'Submit & Connect'}
         </button>
       </form>
     </div>
