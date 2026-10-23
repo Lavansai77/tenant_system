@@ -64,3 +64,44 @@ tenant_system/
 │   └── vite.config.js      # Vite build configuration
 │
 └── README.md               # Project documentation
+
+
+
+Environment Variables
+
+The backend uses environment variables for the database connection configuration.
+
+Example:
+
+Code snippet
+DATABASE_URL=your_neon_postgresql_connection_string
+PORT=5000
+
+▶️ Running the Backend
+
+Navigate to the backend:
+
+cd backend
+
+Install dependencies:
+npm install
+
+Start the server:
+node server.js
+
+The backend runs on:
+http://localhost:5000
+
+
+▶️ Running the Frontend
+
+Navigate to the frontend:
+
+cd frontend
+
+Install dependencies:
+npm install
+
+Start the React development server:
+npm run dev
+The frontend will be available through the URL shown by Vite.
